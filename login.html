@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FurrfectCafe | Log In</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      background: var(--bg);
+    }
+
+    .auth-panel {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #4b2617 0%, #2f180e 100%);
+      color: #fff7ef;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .auth-panel::before,
+    .auth-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(201, 122, 53, 0.18);
+      pointer-events: none;
+    }
+
+    .auth-panel::before {
+      width: 240px;
+      height: 240px;
+      right: -60px;
+      bottom: -60px;
+    }
+
+    .auth-panel::after {
+      width: 160px;
+      height: 160px;
+      left: -50px;
+      top: 90px;
+    }
+
+    .back-link {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 28px;
+    }
+
+    .back-link:hover {
+      color: #fff;
+    }
+
+    .auth-brand {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 42px;
+    }
+
+    .auth-panel-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+    }
+
+    .auth-panel-copy h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 0.96;
+      margin-bottom: 16px;
+    }
+
+    .auth-panel-copy p {
+      font-family: Arial, Helvetica, sans-serif;
+      color: rgba(255,255,255,0.82);
+      margin: 0;
+    }
+
+    .auth-form-wrap {
+      display: grid;
+      place-items: center;
+      padding: 40px 20px;
+    }
+
+    .auth-card {
+      width: min(100%, 540px);
+      background: transparent;
+    }
+
+    .auth-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 10px;
+    }
+
+    .auth-subtext {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+    }
+
+    .auth-subtext a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .field-icon-wrap {
+      position: relative;
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .field-icon-wrap .input {
+      padding-left: 44px;
+      padding-right: 44px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .form-row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 8px 0 6px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.92rem;
+    }
+
+    .remember-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+    }
+
+    .remember-wrap input {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+
+    .text-link {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .google-btn {
+      background: #1f86da;
+      color: white;
+    }
+
+    .auth-footer-link {
+      margin-top: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .auth-footer-link a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .demo-note {
+      margin-top: 16px;
+      background: #fff7ef;
+      border: 1px solid rgba(201, 122, 53, 0.28);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 920px) {
+      .auth-page {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-panel {
+        min-height: 320px;
+      }
+
+      .auth-form-wrap {
+        padding-top: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-panel">
+      <div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <div class="auth-brand">
+          <span class="brand-mark">CAFE</span>
+          <span class="brand-name">FurrfectCafe</span>
+        </div>
+
+        <div class="auth-panel-copy">
+          <span class="eyebrow" style="color:#f4bf88;">Welcome Back</span>
+          <h1>Great to see you again!</h1>
+          <p>
+            Log in to track your orders, redeem promos, and order your favorites from FurrfectCafe.
+          </p>
+        </div>
+      </div>
+
+      <p style="position:relative; z-index:1; font-family:Arial, Helvetica, sans-serif; color:rgba(255,255,255,0.72); margin:0;">
+        Good food, great vibes, happy cats.
+      </p>
+    </section>
+
+    <section class="auth-form-wrap">
+      <div class="auth-card">
+        <h1 class="auth-title">Log In</h1>
+        <p class="auth-subtext">
+          Don’t have an account? <a href="register.html">Sign up free</a>
+        </p>
+
+        <form id="loginForm" class="form-grid" novalidate>
+          <div class="field">
+            <label for="email">Email address</label>
+            <div class="field-icon-wrap">
+              <span class="field-icon">✉</span>
+              <input class="input" type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="field-icon-wrap">
+              <span class="field-icon">🔒</span>
+              <input class="input" type="password" id="password" name="password" placeholder="Enter your password" required minlength="6">
+              <button class="toggle-password" type="button" id="togglePassword" aria-label="Show password">👁</button>
+            </div>
+          </div>
+
+          <div class="form-row-between">
+            <label class="remember-wrap">
+              <input type="checkbox" id="rememberMe">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="text-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">🔐 Log In</button>
+
+          <div class="divider">or continue with</div>
+
+          <button type="button" class="btn google-btn btn-full">Continue with Google</button>
+        </form>
+
+        <p class="auth-footer-link">
+          New to FurrfectCafe? <a href="register.html">Create an account →</a>
+        </p>
+
+        <div class="demo-note">
+          Demo login: any valid email + password with at least 6 characters will work.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginForm = document.getElementById("loginForm");
+      const passwordInput = document.getElementById("password");
+      const togglePassword = document.getElementById("togglePassword");
+
+      togglePassword.addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        togglePassword.textContent = isPassword ? "🙈" : "👁";
+      });
+
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = passwordInput.value.trim();
+        const rememberMe = document.getElementById("rememberMe").checked;
+
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+          alert("Please enter a valid email address.");
+          return;
+        }
+
+        if (password.length < 6) {
+          alert("Password must be at least 6 characters.");
+          return;
+        }
+
+        const userName = email.split("@")[0];
+        const demoUser = {
+          name: userName,
+          email: email,
+          rememberMe: rememberMe
+        };
+
+        localStorage.setItem("furrfectcafe_user", JSON.stringify(demoUser));
+        localStorage.setItem("furrfectcafe_logged_in", "true");
+
+        alert("Login successful. Redirecting to home page.");
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>

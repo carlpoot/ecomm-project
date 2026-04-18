@@ -1,0 +1,131 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FurrfectCafe | Menu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="index.html" class="brand" aria-label="FurrfectCafe home">
+        <span class="brand-mark">CAFE</span>
+        <span class="brand-name">FurrfectCafe</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="menu.html" class="active">Menu</a>
+        <a href="orders.html">My Orders</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="cart.html" class="cart-pill" aria-label="Cart">
+          <span>🛒 Cart</span>
+          <span class="cart-pill-count" data-cart-count>0</span>
+        </a>
+        <a href="profile.html" class="btn btn-secondary btn-sm">👤 Fuji</a>
+      </div>
+
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <!-- Menu Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="menu-hero">
+        <span class="eyebrow" style="color: #f4bf88;">Our Menu</span>
+        <h1 class="section-title" style="color: white;">What are you <em>craving</em> today?</h1>
+        <p class="section-text">
+          Fresh drinks, pastries, and bites made with love. Order online for delivery or pick-up.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="filter-toolbar">
+        <div class="search-wrap">
+          <span>🔎</span>
+          <input type="text" id="menuSearch" placeholder="Search drinks, pastries, bites...">
+        </div>
+
+        <div class="category-filters" id="categoryFilters"></div>
+      </div>
+
+      <div class="space-between mb-0">
+        <div>
+          <span class="eyebrow">Menu Items</span>
+          <h2 class="section-title">Browse all café favorites</h2>
+        </div>
+        <p class="section-text"><strong data-menu-count>0</strong> items found</p>
+      </div>
+
+      <div class="grid menu-grid mt-32" id="menuGrid"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-brand">
+          <span class="brand-mark">CAFE</span>
+          <strong class="brand-name">FurrfectCafe</strong>
+        </div>
+        <p class="footer-text">
+          A cozy cat café in Legazpi City, Albay. Order online and enjoy your favorites at home or pick them up fresh.
+        </p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="TikTok">♪</a>
+          <a href="#" aria-label="Twitter">x</a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="footer-heading">Quick Links</h3>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="menu.html">Menu</a>
+          <a href="#">Promotions</a>
+          <a href="#">How It Works</a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="footer-heading">Account</h3>
+        <div class="footer-links">
+          <a href="login.html">Log In</a>
+          <a href="register.html">Register</a>
+          <a href="orders.html">My Orders</a>
+          <a href="profile.html">Profile</a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="footer-heading">Contact</h3>
+        <div class="footer-contact">
+          <span>📍 Legazpi City, Albay</span>
+          <span>📞 +63 912 345 6789</span>
+          <span>✉️ hello@furrfectcafe.ph</span>
+          <span>🕘 8AM - 9PM daily</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      © 2026 FurrfectCafe. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

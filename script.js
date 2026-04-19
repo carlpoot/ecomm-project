@@ -1,7 +1,3 @@
-/* =========================================================
-   FurrfectCafe Shared Front-End Logic
-   ========================================================= */
-
 const FurrfectCafe = (() => {
   const STORAGE_KEYS = {
     cart: "furrfectcafe_cart",

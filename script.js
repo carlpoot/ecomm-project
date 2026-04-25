@@ -273,13 +273,15 @@ const FurrfectCafe = (() => {
   function createProductCard(product) {
     return `
       <article class="product-card card">
-        <div class="product-media">
+        <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
           ${createBadgeHTML(product)}
           <img src="${product.image}" alt="${product.name}">
-        </div>
+        </a>
         <div class="product-body">
           <span class="product-category">${product.categoryLabel}</span>
-          <h3 class="product-title">${product.name}</h3>
+          <h3 class="product-title">
+            <a href="product.html?id=${product.id}">${product.name}</a>
+          </h3>
           <p class="card-desc">${product.description}</p>
           <div class="product-bottom">
             <div>
@@ -336,9 +338,11 @@ const FurrfectCafe = (() => {
     const picks = products.filter(product => product.featured).slice(0, count);
     target.innerHTML = picks.map(product => `
       <div class="pick-item">
-        <img src="${product.image}" alt="${product.name}">
+        <a href="product.html?id=${product.id}">
+          <img src="${product.image}" alt="${product.name}">
+        </a>
         <div>
-          <strong>${product.name}</strong>
+          <strong><a href="product.html?id=${product.id}">${product.name}</a></strong>
           <span>${formatPeso(product.price)}</span>
         </div>
         <button type="button" class="add-to-cart-btn" data-product-id="${product.id}">+</button>
@@ -363,11 +367,11 @@ const FurrfectCafe = (() => {
       };
 
       return `
-        <article class="card category-card">
+        <a href="menu.html?category=${category.id}" class="card category-card">
           <div class="category-icon">${iconMap[category.id] || "🍽️"}</div>
           <h3>${category.name}</h3>
           <div class="category-meta">${count} items</div>
-        </article>
+        </a>
       `;
     });
 
@@ -391,11 +395,18 @@ const FurrfectCafe = (() => {
 
     const searchInput = document.querySelector("#menuSearch");
     const filterWrap = document.querySelector("#categoryFilters");
+    const params = new URLSearchParams(window.location.search);
 
-    let activeCategory = "all";
-    let activeSearch = "";
+    let activeCategory = params.get("category") || "all";
+    let activeSearch = params.get("search") || "";
 
     renderMenuFilters("#categoryFilters");
+
+    function syncActiveChip() {
+      filterWrap?.querySelectorAll(".filter-chip").forEach(item => {
+        item.classList.toggle("active", item.dataset.category === activeCategory);
+      });
+    }
 
     function applyFilters() {
       const filtered = products.filter(product => {
@@ -408,6 +419,11 @@ const FurrfectCafe = (() => {
       renderProductGrid("#menuGrid", filtered);
       const countEl = document.querySelector("[data-menu-count]");
       if (countEl) countEl.textContent = filtered.length;
+      syncActiveChip();
+    }
+
+    if (searchInput) {
+      searchInput.value = activeSearch;
     }
 
     filterWrap?.addEventListener("click", (event) => {
@@ -415,8 +431,6 @@ const FurrfectCafe = (() => {
       if (!chip) return;
 
       activeCategory = chip.dataset.category;
-      filterWrap.querySelectorAll(".filter-chip").forEach(item => item.classList.remove("active"));
-      chip.classList.add("active");
       applyFilters();
     });
 
@@ -532,8 +546,8 @@ const FurrfectCafe = (() => {
 
     if (!getStorage(STORAGE_KEYS.user, null)) {
       setStorage(STORAGE_KEYS.user, {
-        name: "Fuji",
-        email: "fuji@example.com"
+        name: "Aliesa",
+        email: "aliesa@example.com"
       });
     }
   }

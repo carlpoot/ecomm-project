@@ -173,6 +173,10 @@
     .text-link {
       color: var(--accent);
       font-weight: 700;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
 
     .divider {
@@ -291,14 +295,14 @@
               <input type="checkbox" id="rememberMe">
               <span>Remember me</span>
             </label>
-            <a href="#" class="text-link">Forgot password?</a>
+            <button type="button" class="text-link" id="forgotPasswordBtn">Forgot password?</button>
           </div>
 
           <button type="submit" class="btn btn-primary btn-full">🔐 Log In</button>
 
           <div class="divider">or continue with</div>
 
-          <button type="button" class="btn google-btn btn-full">Continue with Google</button>
+          <button type="button" class="btn google-btn btn-full" id="googleLoginBtn">Continue with Google</button>
         </form>
 
         <p class="auth-footer-link">
@@ -318,11 +322,21 @@
       const loginForm = document.getElementById("loginForm");
       const passwordInput = document.getElementById("password");
       const togglePassword = document.getElementById("togglePassword");
+      const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+      const googleLoginBtn = document.getElementById("googleLoginBtn");
 
       togglePassword.addEventListener("click", () => {
         const isPassword = passwordInput.type === "password";
         passwordInput.type = isPassword ? "text" : "password";
         togglePassword.textContent = isPassword ? "🙈" : "👁";
+      });
+
+      forgotPasswordBtn.addEventListener("click", () => {
+        alert("Forgot password is a front-end demo only for now.");
+      });
+
+      googleLoginBtn.addEventListener("click", () => {
+        alert("Google sign-in is a front-end demo only for now.");
       });
 
       loginForm.addEventListener("submit", (event) => {

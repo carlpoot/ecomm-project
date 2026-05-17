@@ -1709,54 +1709,58 @@ tbody tr:hover {
 
 .simple-menu-card {
   overflow: hidden;
+  border-radius: 22px !important;
 }
 
 .simple-menu-card .product-media {
   display: block !important;
-  height: 135px !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 175px !important;
   aspect-ratio: unset !important;
-  border-radius: 18px 18px 0 0 !important;
+  border-radius: 22px 22px 0 0 !important;
   overflow: hidden !important;
 }
 
 .simple-menu-card .product-media img {
+  display: block !important;
   width: 100% !important;
-  height: 135px !important;
+  height: 175px !important;
   object-fit: cover !important;
 }
 
+.simple-menu-card .product-image-label {
+  display: none !important;
+}
+
 .simple-menu-body {
-  padding: 12px 14px 14px !important;
+  padding: 16px 18px 18px !important;
 }
 
 .simple-menu-body .product-title {
-  font-size: 1rem !important;
-  margin-bottom: 8px !important;
-  line-height: 1.2;
+  font-size: 1.15rem !important;
+  line-height: 1.25 !important;
+  margin-bottom: 10px !important;
 }
 
 .simple-menu-body .price {
-  font-size: 1rem !important;
-  font-weight: 700;
-}
-
-.simple-menu-card .product-image-label {
-  left: 8px !important;
-  right: 8px !important;
-  bottom: 8px !important;
-  padding: 6px 9px !important;
-  border-radius: 10px !important;
-  font-size: 0.78rem !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
 }
 
 .menu-grid.compact-products {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 16px !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 22px !important;
 }
 
 @media (max-width: 1100px) {
   .menu-grid.compact-products {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .simple-menu-card .product-media,
+  .simple-menu-card .product-media img {
+    height: 165px !important;
   }
 }
 
@@ -1767,7 +1771,7 @@ tbody tr:hover {
 
   .simple-menu-card .product-media,
   .simple-menu-card .product-media img {
-    height: 130px !important;
+    height: 160px !important;
   }
 }
 
@@ -1778,6 +1782,6 @@ tbody tr:hover {
 
   .simple-menu-card .product-media,
   .simple-menu-card .product-media img {
-    height: 145px !important;
+    height: 190px !important;
   }
 }

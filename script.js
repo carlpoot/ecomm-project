@@ -330,25 +330,24 @@ const FurrfectCafe = (() => {
     `;
   }
 
-function createProductCard(product) {
-  return `
-    <article class="product-card card simple-menu-card">
-      <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
-        ${createBadgeHTML(product)}
-        <img src="${product.image}" alt="${product.name}">
-        <span class="product-image-label">${product.name}</span>
-      </a>
+  function createProductCard(product) {
+    return `
+      <article class="product-card card simple-menu-card">
+        <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
+          ${createBadgeHTML(product)}
+          <img src="${product.image}" alt="${product.name}">
+        </a>
 
-      <div class="product-body simple-menu-body">
-        <h3 class="product-title">
-          <a href="product.html?id=${product.id}">${product.name}</a>
-        </h3>
+        <div class="product-body simple-menu-body">
+          <h3 class="product-title">
+            <a href="product.html?id=${product.id}">${product.name}</a>
+          </h3>
 
-        <div class="price">${formatPeso(product.price)}</div>
-      </div>
-    </article>
-  `;
-}
+          <div class="price">${formatPeso(product.price)}</div>
+        </div>
+      </article>
+    `;
+  }
 
   function renderProductGrid(targetSelector, items) {
     const target = document.querySelector(targetSelector);

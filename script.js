@@ -336,6 +336,7 @@ const FurrfectCafe = (() => {
         <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
           ${createBadgeHTML(product)}
           <img src="${product.image}" alt="${product.name}">
+          <span class="product-image-label">${product.name}</span>
         </a>
 
         <div class="product-body">

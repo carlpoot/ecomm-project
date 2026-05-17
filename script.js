@@ -58,7 +58,7 @@ const FurrfectCafe = (() => {
       categoryLabel: "Cold Drinks",
       description: "Premium matcha blended with oat milk and soft cream cloud topping.",
       price: 110,
-      image: "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=900&q=80",
+      image: "https://plus.unsplash.com/premium_photo-1663853489900-3f24ea776dea?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       badge: "",
       featured: true,
       bestseller: true
@@ -149,7 +149,7 @@ const FurrfectCafe = (() => {
       categoryLabel: "Cold Drinks",
       description: "Bold double-shot espresso over ice for a clean and refreshing kick.",
       price: 75,
-      image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1f59d?auto=format&fit=crop&w=900&q=80",
+      image: "https://images.unsplash.com/photo-1709689242523-c6d8027c7499?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       badge: "",
       featured: false,
       bestseller: false
@@ -175,7 +175,7 @@ const FurrfectCafe = (() => {
       categoryLabel: "Fruit Blends",
       description: "Creamy strawberry smoothie with yogurt and a hint of honey.",
       price: 95,
-      image: "https://images.unsplash.com/photo-1553530666-ba11a90bb918?auto=format&fit=crop&w=900&q=80",
+      image: "https://plus.unsplash.com/premium_photo-1726765809820-80c09e800f3b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       badge: "",
       featured: false,
       bestseller: false
@@ -330,24 +330,24 @@ const FurrfectCafe = (() => {
     `;
   }
 
-  function createProductCard(product) {
-    return `
-      <article class="product-card card simple-menu-card">
-        <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
-          ${createBadgeHTML(product)}
-          <img src="${product.image}" alt="${product.name}">
-        </a>
+function createProductCard(product) {
+  return `
+    <article class="product-card card simple-menu-card">
+      <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
+        ${createBadgeHTML(product)}
+        <img src="${product.image}" alt="${product.name}">
+      </a>
 
-        <div class="product-body simple-menu-body">
-          <h3 class="product-title">
-            <a href="product.html?id=${product.id}">${product.name}</a>
-          </h3>
+      <div class="product-body simple-menu-body">
+        <h3 class="product-title">
+          <a href="product.html?id=${product.id}">${product.name}</a>
+        </h3>
 
-          <div class="price">${formatPeso(product.price)}</div>
-        </div>
-      </article>
-    `;
-  }
+        <div class="price">${formatPeso(product.price)}</div>
+      </div>
+    </article>
+  `;
+}
 
   function renderProductGrid(targetSelector, items) {
     const target = document.querySelector(targetSelector);

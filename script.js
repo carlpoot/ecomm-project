@@ -645,15 +645,31 @@ function createProductCard(product) {
     renderFeaturedProducts("#featuredGrid", 4);
   }
 
-  function logoutCustomer() {
-    localStorage.removeItem("furrfectcafe_logged_in");
-    window.location.href = "login.html";
+ function logoutCustomer() {
+  const confirmLogout = confirm("Are you sure you want to log out of your customer account?");
+
+  if (!confirmLogout) {
+    return;
   }
 
-  function logoutAdmin() {
-    localStorage.removeItem("furrfectcafe_admin_logged_in");
-    window.location.href = "login.html";
+  localStorage.removeItem("furrfectcafe_logged_in");
+
+  alert("You have successfully logged out.");
+  window.location.href = "login.html";
+}
+
+function logoutAdmin() {
+  const confirmLogout = confirm("Are you sure you want to log out of the admin dashboard?");
+
+  if (!confirmLogout) {
+    return;
   }
+
+  localStorage.removeItem("furrfectcafe_admin_logged_in");
+
+  alert("Admin logout successful.");
+  window.location.href = "login.html";
+}
 
   function initLogoutButtons() {
     document.querySelectorAll("[data-customer-logout]").forEach(button => {

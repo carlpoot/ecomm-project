@@ -189,31 +189,174 @@
   </div>
 
   <script src="script.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("furrfectcafe_admin_logged_in") !== "true") {
-        window.location.href = "admin-login.html";
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("productForm");
+
+    const productName = document.getElementById("productName");
+    const productDescription = document.getElementById("productDescription");
+    const productPrice = document.getElementById("productPrice");
+    const productCategory = document.getElementById("productCategory");
+    const productBadge = document.getElementById("productBadge");
+    const productAvailability = document.getElementById("productAvailability");
+    const sizeOptions = document.getElementById("sizeOptions");
+    const addOns = document.getElementById("addOns");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get("id");
+
+    function getAdminProducts() {
+      const storedProducts = JSON.parse(localStorage.getItem("furrfectcafe_admin_products") || "[]");
+
+      if (storedProducts.length) {
+        return storedProducts;
+      }
+
+      const defaultProducts = [
+        {
+          id: 1,
+          name: "Signature Cat Latte",
+          description: "Rich espresso with velvety steamed milk and adorable cat latte art.",
+          price: 85,
+          category: "Hot Drinks",
+          badge: "10% OFF",
+          availability: "Available",
+          sizeOptions: "Small, Regular, Large",
+          addOns: "Extra Shot +20, Oat Milk +15, Vanilla Syrup +10, Caramel Drizzle +10",
+          image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80",
+          orders: 142
+        },
+        {
+          id: 2,
+          name: "Matcha Cloud",
+          description: "Premium matcha blended with oat milk and soft cream cloud topping.",
+          price: 110,
+          category: "Cold Drinks",
+          badge: "",
+          availability: "Available",
+          sizeOptions: "Small, Regular, Large",
+          addOns: "Oat Milk +15, Cream Cloud +20",
+          image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=900&q=80",
+          orders: 98
+        },
+        {
+          id: 3,
+          name: "Matcha Cheesecake",
+          description: "Creamy New York style cheesecake with a dreamy matcha finish.",
+          price: 120,
+          category: "Pastries",
+          badge: "Buy 2 Get 1",
+          availability: "Available",
+          sizeOptions: "",
+          addOns: "",
+          image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=900&q=80",
+          orders: 76
+        }
+      ];
+
+      localStorage.setItem("furrfectcafe_admin_products", JSON.stringify(defaultProducts));
+      return defaultProducts;
+    }
+
+    function saveAdminProducts(products) {
+      localStorage.setItem("furrfectcafe_admin_products", JSON.stringify(products));
+    }
+
+    function fillEditForm() {
+      if (!editId) return;
+
+      const products = getAdminProducts();
+      const product = products.find(item => String(item.id) === String(editId));
+
+      if (!product) {
+        alert("Product not found. You can create a new product instead.");
         return;
       }
 
-      const form = document.getElementById("productForm");
+      productName.value = product.name || "";
+      productDescription.value = product.description || "";
+      productPrice.value = product.price || "";
+      productCategory.value = product.category || "Hot Drinks";
+      productBadge.value = product.badge || "";
+      productAvailability.value = product.availability || "Available";
+      sizeOptions.value = product.sizeOptions || "";
+      addOns.value = product.addOns || "";
+    }
 
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
+    form.addEventListener("submit", event => {
+      event.preventDefault();
 
-        const name = document.getElementById("productName").value.trim();
-        const price = document.getElementById("productPrice").value.trim();
-        const category = document.getElementById("productCategory").value.trim();
+      const name = productName.value.trim();
+      const description = productDescription.value.trim();
+      const price = Number(productPrice.value);
+      const category = productCategory.value.trim();
+      const badge = productBadge.value.trim();
+      const availability = productAvailability.value.trim();
 
-        if (!name || !price || !category) {
-          alert("Please complete the required product fields.");
+      if (!name) {
+        alert("Please enter a product name.");
+        return;
+      }
+
+      if (!price || price <= 0) {
+        alert("Please enter a valid product price.");
+        return;
+      }
+
+      if (!category) {
+        alert("Please select a category.");
+        return;
+      }
+
+      const products = getAdminProducts();
+
+      if (editId) {
+        const index = products.findIndex(item => String(item.id) === String(editId));
+
+        if (index !== -1) {
+          products[index] = {
+            ...products[index],
+            name,
+            description,
+            price,
+            category,
+            badge,
+            availability,
+            sizeOptions: sizeOptions.value.trim(),
+            addOns: addOns.value.trim()
+          };
+
+          saveAdminProducts(products);
+          alert("Product updated successfully.");
+          window.location.href = "admin-products.html";
           return;
         }
+      }
 
-        alert("Product saved successfully. Demo only.");
-        window.location.href = "admin-products.html";
-      });
+      const newProduct = {
+        id: Date.now(),
+        name,
+        description,
+        price,
+        category,
+        badge,
+        availability,
+        sizeOptions: sizeOptions.value.trim(),
+        addOns: addOns.value.trim(),
+        image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
+        orders: 0
+      };
+
+      products.unshift(newProduct);
+      saveAdminProducts(products);
+
+      alert("Product added successfully.");
+      window.location.href = "admin-products.html";
     });
+
+    fillEditForm();
+  });
+
   </script>
 </body>
 </html>

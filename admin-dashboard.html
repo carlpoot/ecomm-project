@@ -5,135 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FurrfectCafe Admin | Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .admin-page-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 2rem;
-      margin: 0;
-    }
-
-    .admin-toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text-muted);
-    }
-
-    .admin-stats {
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .stat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 1.35rem;
-      flex-shrink: 0;
-    }
-
-    .stat-icon.orders { background: #f4ece3; color: var(--primary); }
-    .stat-icon.pending { background: #fff4dd; color: #b78018; }
-    .stat-icon.customers { background: #e7f7ee; color: var(--success); }
-
-    .stat-value {
-      font-size: 2rem;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .stat-label,
-    .stat-subtext {
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .stat-label {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    .stat-subtext {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-    }
-
-    .panel-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow-sm);
-      padding: 20px;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .top-products-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .top-product-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .top-product-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .top-product-row small {
-      display: block;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .quick-actions {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 1100px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 820px) {
-      .admin-toolbar-right {
-        justify-content: flex-start;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="admin-layout">
@@ -159,62 +30,64 @@
         <a href="admin-product-form.html">+ Add / Edit Product</a>
       </nav>
 
-      <div style="margin-top:auto; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.08);">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="brand-mark" style="width:42px;height:42px;background:rgba(255,255,255,0.12); color:#fff; border:none;">A</div>
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-mini">
+          <div class="admin-user-avatar">A</div>
           <div>
             <strong style="display:block;">Admin</strong>
             <span style="font-family:Arial, Helvetica, sans-serif; color:rgba(255,255,255,0.65); font-size:0.9rem;">Administrator</span>
           </div>
         </div>
+
+        <button type="button" class="admin-logout-btn" data-admin-logout>
+          Logout
+        </button>
       </div>
     </aside>
 
     <main class="admin-content">
       <div class="admin-topbar">
         <h1 class="admin-page-title">☰ Dashboard</h1>
+
         <div class="admin-toolbar-right">
           <span>Today: Sun, Mar 22 2026</span>
           <a href="index.html" class="btn btn-secondary btn-sm">View Site</a>
+          <button type="button" class="btn btn-secondary btn-sm" data-admin-logout>Logout</button>
         </div>
       </div>
 
-      <section class="admin-stats">
-        <div class="admin-stats">
-          <div class="grid grid-3">
-            <article class="admin-card stat-card">
-              <div class="stat-icon orders">🧾</div>
-              <div>
-                <div class="stat-value">24</div>
-                <div class="stat-label">Orders Today</div>
-                <div class="stat-subtext">vs yesterday +5</div>
-              </div>
-            </article>
-
-            <article class="admin-card stat-card">
-              <div class="stat-icon pending">🕒</div>
-              <div>
-                <div class="stat-value">5</div>
-                <div class="stat-label">Pending Orders</div>
-                <div class="stat-subtext">Needs attention</div>
-              </div>
-            </article>
-
-            <article class="admin-card stat-card">
-              <div class="stat-icon customers">👥</div>
-              <div>
-                <div class="stat-value">87</div>
-                <div class="stat-label">Total Customers</div>
-                <div class="stat-subtext">+4 this week</div>
-              </div>
-            </article>
+      <section class="dashboard-stats-grid">
+        <article class="dashboard-stat-card">
+          <div class="dashboard-stat-icon orders">🧾</div>
+          <div>
+            <div class="dashboard-stat-value">24</div>
+            <div class="dashboard-stat-label">Orders Today</div>
+            <div class="dashboard-stat-subtext">5 more than yesterday</div>
           </div>
-        </div>
+        </article>
+
+        <article class="dashboard-stat-card">
+          <div class="dashboard-stat-icon pending">🕒</div>
+          <div>
+            <div class="dashboard-stat-value">5</div>
+            <div class="dashboard-stat-label">Pending Orders</div>
+            <div class="dashboard-stat-subtext">Needs attention</div>
+          </div>
+        </article>
+
+        <article class="dashboard-stat-card">
+          <div class="dashboard-stat-icon customers">👥</div>
+          <div>
+            <div class="dashboard-stat-value">87</div>
+            <div class="dashboard-stat-label">Total Customers</div>
+            <div class="dashboard-stat-subtext">4 new this week</div>
+          </div>
+        </article>
       </section>
 
-      <section class="dashboard-grid">
-        <article class="panel-card">
-          <div class="panel-header">
+      <section class="dashboard-main-grid">
+        <article class="admin-panel-card">
+          <div class="admin-panel-header">
             <h2 class="form-title" style="margin:0;">Recent Orders</h2>
             <a href="admin-orders.html" class="btn btn-secondary btn-sm">View All</a>
           </div>
@@ -229,6 +102,7 @@
                   <th>Status</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
                   <td>FC-2026-0043</td>
@@ -236,24 +110,28 @@
                   <td>₱387.50</td>
                   <td><span class="badge badge-warning">Pending</span></td>
                 </tr>
+
                 <tr>
                   <td>FC-2026-0042</td>
                   <td>Carl P.</td>
                   <td>₱215.00</td>
                   <td><span class="badge badge-accent">Preparing</span></td>
                 </tr>
+
                 <tr>
                   <td>FC-2026-0041</td>
                   <td>Neil L.</td>
                   <td>₱450.00</td>
                   <td><span class="badge badge-soft">Ready</span></td>
                 </tr>
+
                 <tr>
                   <td>FC-2026-0040</td>
                   <td>Gab C.</td>
                   <td>₱175.00</td>
                   <td><span class="badge badge-success">Delivered</span></td>
                 </tr>
+
                 <tr>
                   <td>FC-2026-0039</td>
                   <td>Vice G.</td>
@@ -265,14 +143,14 @@
           </div>
         </article>
 
-        <div style="display:grid; gap:18px;">
-          <article class="panel-card">
-            <div class="panel-header">
+        <div class="admin-side-stack">
+          <article class="admin-panel-card">
+            <div class="admin-panel-header">
               <h2 class="form-title" style="margin:0;">Top Products Today</h2>
             </div>
 
-            <div class="top-products-list">
-              <div class="top-product-row">
+            <div class="dashboard-products-list">
+              <div class="dashboard-product-row">
                 <div>
                   <strong>Signature Cat Latte</strong>
                   <small>Hot Drinks</small>
@@ -283,7 +161,7 @@
                 </div>
               </div>
 
-              <div class="top-product-row">
+              <div class="dashboard-product-row">
                 <div>
                   <strong>Matcha Cloud</strong>
                   <small>Cold Drinks</small>
@@ -294,7 +172,7 @@
                 </div>
               </div>
 
-              <div class="top-product-row">
+              <div class="dashboard-product-row">
                 <div>
                   <strong>Matcha Cheesecake</strong>
                   <small>Pastries</small>
@@ -305,7 +183,7 @@
                 </div>
               </div>
 
-              <div class="top-product-row">
+              <div class="dashboard-product-row">
                 <div>
                   <strong>Paw Print Cupcake</strong>
                   <small>Pastries</small>
@@ -318,10 +196,11 @@
             </div>
           </article>
 
-          <article class="panel-card">
+          <article class="admin-panel-card">
             <h2 class="form-title" style="margin-top:0;">Quick Actions</h2>
-            <div class="quick-actions">
-              <a href="admin-product-form.html" class="btn btn-primary btn-full">＋ Add New Product</a>
+
+            <div class="admin-quick-actions">
+              <a href="admin-product-form.html" class="btn btn-primary btn-full">+ Add New Product</a>
               <a href="admin-orders.html" class="btn btn-secondary btn-full">🕒 View Pending Orders</a>
             </div>
           </article>
@@ -331,12 +210,5 @@
   </div>
 
   <script src="script.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("furrfectcafe_admin_logged_in") !== "true") {
-        window.location.href = "admin-login.html";
-      }
-    });
-  </script>
 </body>
 </html>

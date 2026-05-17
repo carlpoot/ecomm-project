@@ -92,19 +92,57 @@
         <div class="space-between mt-16">
           <div>
             <h2 class="section-title">What are you <em>craving?</em></h2>
+            <p class="section-text">
+              Jump straight to your favorite drinks, pastries, or all-day café bites.
+            </p>
           </div>
 
-          <a href="menu.html" class="btn btn-accent btn-sm">View All Menu →</a>
+          <a href="menu.html" class="btn btn-accent btn-sm">View Full Menu →</a>
         </div>
 
         <div class="grid grid-2 mt-32" id="homeCategories"></div>
       </div>
 
-      <aside class="featured-panel">
-        <span class="eyebrow">Featured Items</span>
-        <h2 class="section-title">Our bestsellers</h2>
-        <p class="section-text">Crowd favorites that keep guests coming back for another cozy café run.</p>
-        <div class="featured-stack" id="featuredGrid"></div>
+      <aside class="home-featured-clean">
+        <span class="eyebrow">Featured Menu</span>
+        <h2 class="section-title" style="color:white;">Today’s cozy picks</h2>
+        <p class="section-text">
+          A smaller preview of bestsellers so the homepage feels cleaner and easier to scan.
+        </p>
+
+        <div class="featured-mini-list">
+          <a href="product.html?id=1" class="featured-mini-item">
+            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80" alt="Signature Cat Latte">
+            <div>
+              <strong>Signature Cat Latte</strong>
+              <span>Rich espresso with cat latte art</span>
+            </div>
+            <div class="mini-price">₱85.00</div>
+          </a>
+
+          <a href="product.html?id=2" class="featured-mini-item">
+            <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=300&q=80" alt="Matcha Cloud">
+            <div>
+              <strong>Matcha Cloud</strong>
+              <span>Premium matcha with cream cloud</span>
+            </div>
+            <div class="mini-price">₱110.00</div>
+          </a>
+
+          <a href="product.html?id=3" class="featured-mini-item">
+            <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=300&q=80" alt="Matcha Cheesecake">
+            <div>
+              <strong>Matcha Cheesecake</strong>
+              <span>Creamy cheesecake with matcha finish</span>
+            </div>
+            <div class="mini-price">₱120.00</div>
+          </a>
+        </div>
+
+        <div class="featured-mini-actions">
+          <a href="menu.html" class="btn btn-accent btn-sm">Browse Menu</a>
+          <a href="menu.html?category=pastries" class="btn btn-secondary btn-sm">View Pastries</a>
+        </div>
       </aside>
     </div>
   </section>

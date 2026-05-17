@@ -276,25 +276,61 @@
         if (window.FurrfectCafe && typeof FurrfectCafe.getCart === "function") {
           return FurrfectCafe.getCart();
         }
+
         return JSON.parse(localStorage.getItem("furrfectcafe_cart") || "[]");
+      }
+
+      function clearCart() {
+        if (window.FurrfectCafe && typeof FurrfectCafe.clearCart === "function") {
+          FurrfectCafe.clearCart();
+        } else {
+          localStorage.setItem("furrfectcafe_cart", JSON.stringify([]));
+        }
       }
 
       function getUser() {
         return JSON.parse(localStorage.getItem("furrfectcafe_user") || "{}");
       }
 
+      function getOrderTotals() {
+        const cart = getCart();
+        const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const deliveryFee = orderType === "Delivery" ? 50 : 0;
+        const total = subtotal + deliveryFee;
+
+        return {
+          subtotal,
+          deliveryFee,
+          total
+        };
+      }
+
       function renderSummary() {
         const cart = getCart();
+        const totals = getOrderTotals();
+
         if (!cart.length) {
-          summaryItems.innerHTML = `<div class="section-text">Your cart is empty.</div>`;
+          summaryItems.innerHTML = `
+            <div class="empty-state">
+              <h3>Your cart is empty</h3>
+              <p class="section-text">Please add an item before checking out.</p>
+              <a href="menu.html" class="btn btn-primary mt-16">Go to Menu</a>
+            </div>
+          `;
+
+          subtotalEl.textContent = formatPeso(0);
+          deliveryEl.textContent = formatPeso(0);
+          totalEl.textContent = formatPeso(0);
+
           placeOrderBtn.disabled = true;
           placeOrderBtn.style.opacity = "0.6";
+          placeOrderBtn.style.cursor = "not-allowed";
           return;
         }
 
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const deliveryFee = orderType === "Delivery" ? 50 : 0;
-        const total = subtotal + deliveryFee;
+        placeOrderBtn.disabled = false;
+        placeOrderBtn.style.opacity = "1";
+        placeOrderBtn.style.cursor = "pointer";
 
         summaryItems.innerHTML = cart.map(item => `
           <div class="summary-item">
@@ -303,42 +339,54 @@
           </div>
         `).join("");
 
-        subtotalEl.textContent = formatPeso(subtotal);
-        deliveryEl.textContent = formatPeso(deliveryFee);
-        totalEl.textContent = formatPeso(total);
+        subtotalEl.textContent = formatPeso(totals.subtotal);
+        deliveryEl.textContent = formatPeso(totals.deliveryFee);
+        totalEl.textContent = formatPeso(totals.total);
       }
 
-      function activateCard(container, target, key) {
-        container.querySelectorAll(".select-card").forEach(card => card.classList.remove("active"));
+      function activateCard(container, target, dataKey) {
+        container.querySelectorAll(".select-card").forEach(card => {
+          card.classList.remove("active");
+        });
+
         target.classList.add("active");
-        return target.dataset[key];
+        return target.dataset[dataKey];
       }
 
-      deliveryOptions.addEventListener("click", (event) => {
+      deliveryOptions.addEventListener("click", event => {
         const btn = event.target.closest(".select-card");
         if (!btn) return;
+
         orderType = activateCard(deliveryOptions, btn, "type");
         renderSummary();
       });
 
-      scheduleOptions.addEventListener("click", (event) => {
+      scheduleOptions.addEventListener("click", event => {
         const btn = event.target.closest(".select-card");
         if (!btn) return;
+
         scheduleType = activateCard(scheduleOptions, btn, "schedule");
       });
 
       function prefillUser() {
         const user = getUser();
-        if (!user) return;
-        document.getElementById("fullName").value = user.name || "";
-        document.getElementById("contactNumber").value = user.contactNumber || "";
-        document.getElementById("streetAddress").value = user.fullAddress || "";
+
+        document.getElementById("fullName").value = user.name || "Demo Customer";
+        document.getElementById("contactNumber").value = user.contactNumber || "09123456789";
+        document.getElementById("streetAddress").value = user.fullAddress || "Legazpi City, Albay";
       }
 
-      placeOrderBtn.addEventListener("click", () => {
+      function createOrderNumber() {
+        const randomNumber = Math.floor(Math.random() * 9000) + 1000;
+        return `FC-${new Date().getFullYear()}-${randomNumber}`;
+      }
+
+      function placeDemoOrder() {
         const cart = getCart();
+
         if (!cart.length) {
-          alert("Your cart is empty.");
+          alert("Your cart is empty. Please add an item first.");
+          window.location.href = "menu.html";
           return;
         }
 
@@ -347,47 +395,62 @@
         const streetAddress = document.getElementById("streetAddress").value.trim();
         const orderNotes = document.getElementById("orderNotes").value.trim();
 
-        if (!fullName || !contactNumber || !streetAddress) {
-          alert("Please complete the required checkout fields.");
+        if (!fullName) {
+          alert("Please enter your full name.");
           return;
         }
 
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const deliveryFee = orderType === "Delivery" ? 50 : 0;
-        const total = subtotal + deliveryFee;
+        if (!contactNumber) {
+          alert("Please enter your contact number.");
+          return;
+        }
 
-        const orderNumber = `FC-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
+        if (!streetAddress) {
+          alert("Please enter your address.");
+          return;
+        }
+
+        const totals = getOrderTotals();
+        const orderNumber = createOrderNumber();
+
         const newOrder = {
           id: orderNumber,
           date: new Date().toLocaleString(),
+          customerName: fullName,
+          contactNumber,
+          address: streetAddress,
+          orderNotes,
           type: orderType,
           schedule: scheduleType,
           paymentMethod,
           paymentStatus: paymentMethod === "Cash on Delivery" ? "Unpaid" : "Paid",
           status: "Pending",
-          total,
-          deliveryFee,
-          subtotal,
-          address: streetAddress,
-          contactNumber,
-          customerName: fullName,
-          orderNotes,
+          subtotal: totals.subtotal,
+          deliveryFee: totals.deliveryFee,
+          total: totals.total,
           items: cart.map(item => ({
+            productId: item.productId,
             name: item.name,
             quantity: item.quantity,
             price: item.price,
-            image: item.image
+            image: item.image || "",
+            categoryLabel: item.categoryLabel || ""
           }))
         };
 
         const existingOrders = JSON.parse(localStorage.getItem("furrfectcafe_orders") || "[]");
+
         existingOrders.unshift(newOrder);
+
         localStorage.setItem("furrfectcafe_orders", JSON.stringify(existingOrders));
         localStorage.setItem("furrfectcafe_last_order", JSON.stringify(newOrder));
-        localStorage.setItem("furrfectcafe_cart", JSON.stringify([]));
+
+        clearCart();
 
         window.location.href = "order-confirmation.html";
-      });
+      }
+
+      placeOrderBtn.addEventListener("click", placeDemoOrder);
 
       prefillUser();
       renderSummary();

@@ -183,30 +183,49 @@
       }
 
       if (!order) {
-        orderItems.innerHTML = `<p class="section-text">No recent order found.</p>`;
-      } else {
-        orderNumber.textContent = order.id;
-        orderItems.innerHTML = order.items.map(item => `
-          <div class="order-item-row">
-            <span>${item.name} × ${item.quantity}</span>
-            <strong>${formatPeso(item.price * item.quantity)}</strong>
-          </div>
-        `).join("");
+        orderNumber.textContent = "No order found";
 
-        deliveryFee.textContent = formatPeso(order.deliveryFee || 0);
-        orderTotal.textContent = formatPeso(order.total || 0);
-        deliveryAddress.textContent = order.address || "N/A";
-        paymentMethod.textContent = order.paymentMethod || "Cash on Delivery";
-        estimatedTime.textContent = order.type === "Pick-up" ? "15 to 25 minutes" : "30 to 45 minutes";
-        contactNumber.textContent = order.contactNumber || "N/A";
+        orderItems.innerHTML = `
+          <p class="section-text">
+            No recent order was found. Please place an order first.
+          </p>
+        `;
+
+        deliveryFee.textContent = formatPeso(0);
+        orderTotal.textContent = formatPeso(0);
+        deliveryAddress.textContent = "N/A";
+        paymentMethod.textContent = "N/A";
+        estimatedTime.textContent = "N/A";
+        contactNumber.textContent = "N/A";
+
+        return;
       }
+
+      orderNumber.textContent = order.id;
+
+      orderItems.innerHTML = order.items.map(item => `
+        <div class="order-item-row">
+          <span>${item.name} × ${item.quantity}</span>
+          <strong>${formatPeso(item.price * item.quantity)}</strong>
+        </div>
+      `).join("");
+
+      deliveryFee.textContent = formatPeso(order.deliveryFee || 0);
+      orderTotal.textContent = formatPeso(order.total || 0);
+      deliveryAddress.textContent = order.address || "N/A";
+      paymentMethod.textContent = order.paymentMethod || "Cash on Delivery";
+      contactNumber.textContent = order.contactNumber || "N/A";
+
+      estimatedTime.textContent = order.type === "Pick-up"
+        ? "Ready for pick-up in 15 to 25 minutes"
+        : "Estimated delivery in 30 to 45 minutes";
 
       copyOrderBtn.addEventListener("click", async () => {
         try {
-          await navigator.clipboard.writeText(orderNumber.textContent.trim());
+          await navigator.clipboard.writeText(order.id);
           alert("Order number copied.");
         } catch (error) {
-          alert("Unable to copy order number.");
+          alert(`Order number: ${order.id}`);
         }
       });
     });

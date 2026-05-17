@@ -330,41 +330,25 @@ const FurrfectCafe = (() => {
     `;
   }
 
-  function createProductCard(product) {
-    return `
-      <article class="product-card card">
-        <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
-          ${createBadgeHTML(product)}
-          <img src="${product.image}" alt="${product.name}">
-          <span class="product-image-label">${product.name}</span>
-        </a>
+function createProductCard(product) {
+  return `
+    <article class="product-card card simple-menu-card">
+      <a href="product.html?id=${product.id}" class="product-media" aria-label="View ${product.name}">
+        ${createBadgeHTML(product)}
+        <img src="${product.image}" alt="${product.name}">
+        <span class="product-image-label">${product.name}</span>
+      </a>
 
-        <div class="product-body">
-          <span class="product-category">${product.categoryLabel}</span>
+      <div class="product-body simple-menu-body">
+        <h3 class="product-title">
+          <a href="product.html?id=${product.id}">${product.name}</a>
+        </h3>
 
-          <h3 class="product-title">
-            <a href="product.html?id=${product.id}">${product.name}</a>
-          </h3>
-
-          <p class="card-desc">${product.description}</p>
-
-          <div class="product-bottom">
-            <div>
-              <div class="price">${formatPeso(product.price)}</div>
-            </div>
-
-            <button 
-              type="button"
-              class="icon-btn add-to-cart-btn" 
-              data-product-id="${product.id}" 
-              aria-label="Add ${product.name} to cart">
-              +
-            </button>
-          </div>
-        </div>
-      </article>
-    `;
-  }
+        <div class="price">${formatPeso(product.price)}</div>
+      </div>
+    </article>
+  `;
+}
 
   function renderProductGrid(targetSelector, items) {
     const target = document.querySelector(targetSelector);

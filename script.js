@@ -188,7 +188,7 @@ const FurrfectCafe = (() => {
       categoryLabel: "All-Day Bites",
       description: "Crispy fried chicken on a golden waffle with maple spice glaze.",
       price: 175,
-      image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80",
+      image: "https://images.unsplash.com/photo-1600891963935-9e9544daf776?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       badge: "Best Seller",
       featured: false,
       bestseller: true

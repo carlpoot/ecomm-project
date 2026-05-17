@@ -1,9 +1,31 @@
+/* =========================================================
+   FurrfectCafe Shared Front-End Logic
+   ========================================================= */
+
 const FurrfectCafe = (() => {
   const STORAGE_KEYS = {
     cart: "furrfectcafe_cart",
     user: "furrfectcafe_user",
     orders: "furrfectcafe_orders"
   };
+
+  const customerProtectedPages = [
+    "index.html",
+    "menu.html",
+    "product.html",
+    "cart.html",
+    "checkout.html",
+    "order-confirmation.html",
+    "orders.html",
+    "profile.html"
+  ];
+
+  const adminProtectedPages = [
+    "admin-dashboard.html",
+    "admin-orders.html",
+    "admin-products.html",
+    "admin-product-form.html"
+  ];
 
   const categories = [
     { id: "all", name: "All" },
@@ -173,6 +195,33 @@ const FurrfectCafe = (() => {
     }
   ];
 
+  function getCurrentPage() {
+    const page = window.location.pathname.split("/").pop();
+    return page || "index.html";
+  }
+
+  function guardPages() {
+    const page = getCurrentPage();
+
+    if (customerProtectedPages.includes(page)) {
+      const loggedIn = localStorage.getItem("furrfectcafe_logged_in") === "true";
+      if (!loggedIn) {
+        window.location.href = "login.html";
+        return false;
+      }
+    }
+
+    if (adminProtectedPages.includes(page)) {
+      const adminLoggedIn = localStorage.getItem("furrfectcafe_admin_logged_in") === "true";
+      if (!adminLoggedIn) {
+        window.location.href = "login.html";
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   function getStorage(key, fallback) {
     try {
       const raw = localStorage.getItem(key);
@@ -213,14 +262,18 @@ const FurrfectCafe = (() => {
   }
 
   function addToCart(productId, quantity = 1) {
+    const product = getProductById(productId);
+    if (!product) {
+      alert("Product not found.");
+      return;
+    }
+
     const cart = getCart();
     const existing = cart.find(item => item.productId === productId);
 
     if (existing) {
       existing.quantity += quantity;
     } else {
-      const product = getProductById(productId);
-      if (!product) return;
       cart.push({
         productId,
         quantity,
@@ -232,7 +285,7 @@ const FurrfectCafe = (() => {
     }
 
     saveCart(cart);
-    showToast(`${getProductById(productId)?.name || "Item"} added to cart`);
+    showToast(`${product.name} added to cart`);
   }
 
   function removeFromCart(productId) {
@@ -247,15 +300,21 @@ const FurrfectCafe = (() => {
       }
       return item;
     });
+
     saveCart(cart);
   }
 
+  function clearCart() {
+    saveCart([]);
+  }
+
   function getCartSubtotal() {
-    return getCart().reduce((total, item) => total + (item.price * item.quantity), 0);
+    return getCart().reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
   function updateCartCountUI() {
     const count = getCartCount();
+
     document.querySelectorAll("[data-cart-count]").forEach(el => {
       el.textContent = count;
     });
@@ -263,6 +322,7 @@ const FurrfectCafe = (() => {
 
   function createBadgeHTML(product) {
     if (!product.badge) return "";
+
     return `
       <div class="product-badge-wrap">
         <span class="badge badge-accent">${product.badge}</span>
@@ -277,17 +337,28 @@ const FurrfectCafe = (() => {
           ${createBadgeHTML(product)}
           <img src="${product.image}" alt="${product.name}">
         </a>
+
         <div class="product-body">
           <span class="product-category">${product.categoryLabel}</span>
+
           <h3 class="product-title">
             <a href="product.html?id=${product.id}">${product.name}</a>
           </h3>
+
           <p class="card-desc">${product.description}</p>
+
           <div class="product-bottom">
             <div>
               <div class="price">${formatPeso(product.price)}</div>
             </div>
-            <button class="icon-btn add-to-cart-btn" data-product-id="${product.id}" aria-label="Add ${product.name} to cart">+</button>
+
+            <button 
+              type="button"
+              class="icon-btn add-to-cart-btn" 
+              data-product-id="${product.id}" 
+              aria-label="Add ${product.name} to cart">
+              +
+            </button>
           </div>
         </div>
       </article>
@@ -314,7 +385,10 @@ const FurrfectCafe = (() => {
 
   function bindAddToCartButtons() {
     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-      button.addEventListener("click", () => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+
         const productId = Number(button.dataset.productId);
         addToCart(productId, 1);
       });
@@ -336,16 +410,26 @@ const FurrfectCafe = (() => {
     if (!target) return;
 
     const picks = products.filter(product => product.featured).slice(0, count);
+
     target.innerHTML = picks.map(product => `
       <div class="pick-item">
         <a href="product.html?id=${product.id}">
           <img src="${product.image}" alt="${product.name}">
         </a>
+
         <div>
-          <strong><a href="product.html?id=${product.id}">${product.name}</a></strong>
+          <strong>
+            <a href="product.html?id=${product.id}">${product.name}</a>
+          </strong>
           <span>${formatPeso(product.price)}</span>
         </div>
-        <button type="button" class="add-to-cart-btn" data-product-id="${product.id}">+</button>
+
+        <button 
+          type="button" 
+          class="add-to-cart-btn" 
+          data-product-id="${product.id}">
+          +
+        </button>
       </div>
     `).join("");
 
@@ -356,24 +440,27 @@ const FurrfectCafe = (() => {
     const target = document.querySelector(selector);
     if (!target) return;
 
-    const items = categories.filter(category => category.id !== "all").map(category => {
-      const count = products.filter(product => product.category === category.id).length;
-      const iconMap = {
-        "hot-drinks": "☕",
-        "cold-drinks": "🥤",
-        "pastries": "🧁",
-        "all-day-bites": "🍔",
-        "fruit-blends": "🍹"
-      };
+    const iconMap = {
+      "hot-drinks": "☕",
+      "cold-drinks": "🥤",
+      pastries: "🧁",
+      "all-day-bites": "🍔",
+      "fruit-blends": "🍹"
+    };
 
-      return `
-        <a href="menu.html?category=${category.id}" class="card category-card">
-          <div class="category-icon">${iconMap[category.id] || "🍽️"}</div>
-          <h3>${category.name}</h3>
-          <div class="category-meta">${count} items</div>
-        </a>
-      `;
-    });
+    const items = categories
+      .filter(category => category.id !== "all")
+      .map(category => {
+        const count = products.filter(product => product.category === category.id).length;
+
+        return `
+          <a href="menu.html?category=${category.id}" class="card category-card">
+            <div class="category-icon">${iconMap[category.id] || "🍽️"}</div>
+            <h3>${category.name}</h3>
+            <div class="category-meta">${count} items</div>
+          </a>
+        `;
+      });
 
     target.innerHTML = items.join("");
   }
@@ -383,7 +470,10 @@ const FurrfectCafe = (() => {
     if (!target) return;
 
     target.innerHTML = categories.map((category, index) => `
-      <button class="filter-chip ${index === 0 ? "active" : ""}" data-category="${category.id}">
+      <button 
+        type="button"
+        class="filter-chip ${index === 0 ? "active" : ""}" 
+        data-category="${category.id}">
         ${category.name}
       </button>
     `).join("");
@@ -402,6 +492,10 @@ const FurrfectCafe = (() => {
 
     renderMenuFilters("#categoryFilters");
 
+    if (searchInput) {
+      searchInput.value = activeSearch;
+    }
+
     function syncActiveChip() {
       filterWrap?.querySelectorAll(".filter-chip").forEach(item => {
         item.classList.toggle("active", item.dataset.category === activeCategory);
@@ -413,20 +507,19 @@ const FurrfectCafe = (() => {
         const matchesCategory = activeCategory === "all" || product.category === activeCategory;
         const searchText = `${product.name} ${product.categoryLabel} ${product.description}`.toLowerCase();
         const matchesSearch = searchText.includes(activeSearch.toLowerCase());
+
         return matchesCategory && matchesSearch;
       });
 
       renderProductGrid("#menuGrid", filtered);
+
       const countEl = document.querySelector("[data-menu-count]");
       if (countEl) countEl.textContent = filtered.length;
+
       syncActiveChip();
     }
 
-    if (searchInput) {
-      searchInput.value = activeSearch;
-    }
-
-    filterWrap?.addEventListener("click", (event) => {
+    filterWrap?.addEventListener("click", event => {
       const chip = event.target.closest(".filter-chip");
       if (!chip) return;
 
@@ -434,7 +527,7 @@ const FurrfectCafe = (() => {
       applyFilters();
     });
 
-    searchInput?.addEventListener("input", (event) => {
+    searchInput?.addEventListener("input", event => {
       activeSearch = event.target.value.trim();
       applyFilters();
     });
@@ -448,6 +541,7 @@ const FurrfectCafe = (() => {
     if (!toast) {
       toast = document.createElement("div");
       toast.className = "demo-toast";
+
       Object.assign(toast.style, {
         position: "fixed",
         right: "18px",
@@ -464,16 +558,19 @@ const FurrfectCafe = (() => {
         transform: "translateY(10px)",
         transition: "all 0.25s ease"
       });
+
       document.body.appendChild(toast);
     }
 
     toast.textContent = message;
+
     requestAnimationFrame(() => {
       toast.style.opacity = "1";
       toast.style.transform = "translateY(0)";
     });
 
     clearTimeout(toast._hideTimer);
+
     toast._hideTimer = setTimeout(() => {
       toast.style.opacity = "0";
       toast.style.transform = "translateY(10px)";
@@ -491,9 +588,8 @@ const FurrfectCafe = (() => {
       const expanded = toggle.getAttribute("aria-expanded") === "true";
       toggle.setAttribute("aria-expanded", String(!expanded));
 
-      [navLinks, navActions].forEach(block => {
-        block.classList.toggle("mobile-open");
-      });
+      navLinks.classList.toggle("mobile-open");
+      navActions.classList.toggle("mobile-open");
 
       if (!document.querySelector("#mobileMenuStyles")) {
         const style = document.createElement("style");
@@ -515,11 +611,23 @@ const FurrfectCafe = (() => {
               align-items: stretch;
               gap: 14px;
             }
-            .nav-links.mobile-open { top: 86px; }
-            .nav-actions.mobile-open { top: 250px; }
-            .nav-actions.mobile-open .btn { display: inline-flex !important; width: 100%; }
+
+            .nav-links.mobile-open {
+              top: 86px;
+            }
+
+            .nav-actions.mobile-open {
+              top: 250px;
+            }
+
+            .nav-actions.mobile-open .btn,
+            .nav-actions.mobile-open .cart-pill {
+              display: inline-flex !important;
+              width: 100%;
+            }
           }
         `;
+
         document.head.appendChild(style);
       }
     });
@@ -529,7 +637,8 @@ const FurrfectCafe = (() => {
     if (!getStorage(STORAGE_KEYS.orders, null)) {
       setStorage(STORAGE_KEYS.orders, [
         {
-          id: "FC-2024-0043",
+          id: "FC-2026-0043",
+          date: "Mar 27, 2026 2:14 PM",
           type: "Delivery",
           total: 387.5,
           paymentMethod: "Cash on Delivery",
@@ -543,13 +652,6 @@ const FurrfectCafe = (() => {
         }
       ]);
     }
-
-    if (!getStorage(STORAGE_KEYS.user, null)) {
-      setStorage(STORAGE_KEYS.user, {
-        name: "Aliesa",
-        email: "aliesa@example.com"
-      });
-    }
   }
 
   function initHomePage() {
@@ -559,12 +661,36 @@ const FurrfectCafe = (() => {
     renderFeaturedProducts("#featuredGrid", 4);
   }
 
+  function logoutCustomer() {
+    localStorage.removeItem("furrfectcafe_logged_in");
+    window.location.href = "login.html";
+  }
+
+  function logoutAdmin() {
+    localStorage.removeItem("furrfectcafe_admin_logged_in");
+    window.location.href = "login.html";
+  }
+
+  function initLogoutButtons() {
+    document.querySelectorAll("[data-customer-logout]").forEach(button => {
+      button.addEventListener("click", logoutCustomer);
+    });
+
+    document.querySelectorAll("[data-admin-logout]").forEach(button => {
+      button.addEventListener("click", logoutAdmin);
+    });
+  }
+
   function initGlobal() {
+    const allowed = guardPages();
+    if (!allowed) return;
+
     seedMockData();
     updateCartCountUI();
     initMobileMenu();
     initHomePage();
     initMenuPage();
+    initLogoutButtons();
   }
 
   return {
@@ -572,16 +698,23 @@ const FurrfectCafe = (() => {
     categories,
     formatPeso,
     getCart,
+    saveCart,
     addToCart,
     removeFromCart,
     updateCartItemQuantity,
+    clearCart,
     getCartSubtotal,
+    updateCartCountUI,
     renderProductGrid,
     renderFeaturedProducts,
     renderBestsellers,
     renderCategoryCards,
+    logoutCustomer,
+    logoutAdmin,
     initGlobal
   };
 })();
+
+window.FurrfectCafe = FurrfectCafe;
 
 document.addEventListener("DOMContentLoaded", FurrfectCafe.initGlobal);

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FurrfectCafe | Log In</title>
+  <title>FurrfectCafe | Login Portal</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .auth-page {
+    .portal-page {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
+      grid-template-columns: 0.95fr 1.05fr;
       background: var(--bg);
     }
 
-    .auth-panel {
+    .portal-panel {
       position: relative;
       overflow: hidden;
       background: linear-gradient(180deg, #4b2617 0%, #2f180e 100%);
@@ -24,8 +24,8 @@
       justify-content: space-between;
     }
 
-    .auth-panel::before,
-    .auth-panel::after {
+    .portal-panel::before,
+    .portal-panel::after {
       content: "";
       position: absolute;
       border-radius: 50%;
@@ -33,21 +33,27 @@
       pointer-events: none;
     }
 
-    .auth-panel::before {
-      width: 240px;
-      height: 240px;
-      right: -60px;
-      bottom: -60px;
+    .portal-panel::before {
+      width: 250px;
+      height: 250px;
+      right: -70px;
+      bottom: -70px;
     }
 
-    .auth-panel::after {
-      width: 160px;
-      height: 160px;
+    .portal-panel::after {
+      width: 170px;
+      height: 170px;
       left: -50px;
       top: 90px;
     }
 
-    .back-link {
+    .portal-panel-content {
+      position: relative;
+      z-index: 1;
+      max-width: 460px;
+    }
+
+    .portal-back-link {
       position: relative;
       z-index: 1;
       display: inline-flex;
@@ -58,11 +64,11 @@
       margin-bottom: 28px;
     }
 
-    .back-link:hover {
+    .portal-back-link:hover {
       color: #fff;
     }
 
-    .auth-brand {
+    .portal-brand {
       position: relative;
       z-index: 1;
       display: flex;
@@ -71,49 +77,75 @@
       margin-bottom: 42px;
     }
 
-    .auth-panel-copy {
-      position: relative;
-      z-index: 1;
-      max-width: 420px;
-    }
-
-    .auth-panel-copy h1 {
-      font-size: clamp(2.4rem, 5vw, 4.2rem);
+    .portal-panel h1 {
+      font-size: clamp(2.6rem, 5vw, 4.5rem);
       line-height: 0.96;
       margin-bottom: 16px;
     }
 
-    .auth-panel-copy p {
+    .portal-panel p {
       font-family: Arial, Helvetica, sans-serif;
       color: rgba(255,255,255,0.82);
       margin: 0;
     }
 
-    .auth-form-wrap {
+    .portal-form-wrap {
       display: grid;
       place-items: center;
       padding: 40px 20px;
     }
 
-    .auth-card {
-      width: min(100%, 540px);
-      background: transparent;
+    .portal-card {
+      width: min(100%, 620px);
     }
 
-    .auth-title {
+    .portal-title {
       font-size: clamp(2rem, 4vw, 3rem);
       margin-bottom: 10px;
     }
 
-    .auth-subtext {
+    .portal-subtext {
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text-muted);
-      margin-bottom: 26px;
+      margin-bottom: 24px;
     }
 
-    .auth-subtext a {
+    .portal-subtext a {
       color: var(--accent);
       font-weight: 700;
+    }
+
+    .portal-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+      background: #efe5d8;
+      border-radius: 18px;
+      padding: 6px;
+    }
+
+    .portal-tab {
+      min-height: 48px;
+      border-radius: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .portal-tab.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .login-panel {
+      display: none;
+    }
+
+    .login-panel.active {
+      display: block;
     }
 
     .field-icon-wrap {
@@ -143,6 +175,10 @@
       transform: translateY(-50%);
       font-size: 0.95rem;
       color: var(--text-muted);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
 
     .form-row-between {
@@ -177,6 +213,7 @@
       border: none;
       padding: 0;
       cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     .divider {
@@ -202,22 +239,9 @@
       color: white;
     }
 
-    .auth-footer-link {
-      margin-top: 18px;
-      font-family: Arial, Helvetica, sans-serif;
-      text-align: center;
-      color: var(--text-muted);
-    }
-
-    .auth-footer-link a {
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .demo-note {
+    .demo-note,
+    .admin-note {
       margin-top: 16px;
-      background: #fff7ef;
-      border: 1px solid rgba(201, 122, 53, 0.28);
       border-radius: 16px;
       padding: 14px 16px;
       font-family: Arial, Helvetica, sans-serif;
@@ -225,39 +249,46 @@
       font-size: 0.9rem;
     }
 
+    .demo-note {
+      background: #fff7ef;
+      border: 1px solid rgba(201, 122, 53, 0.28);
+    }
+
+    .admin-note {
+      background: #f3ede7;
+      border: 1px solid var(--border);
+    }
+
     @media (max-width: 920px) {
-      .auth-page {
+      .portal-page {
         grid-template-columns: 1fr;
       }
 
-      .auth-panel {
+      .portal-panel {
         min-height: 320px;
       }
 
-      .auth-form-wrap {
+      .portal-form-wrap {
         padding-top: 30px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="auth-page">
-    <section class="auth-panel">
-      <div>
-        <a href="index.html" class="back-link">← Back to Home</a>
+  <main class="portal-page">
+    <section class="portal-panel">
+      <div class="portal-panel-content">
+        <a href="index.html" class="portal-back-link">← Back to Home</a>
 
-        <div class="auth-brand">
+        <div class="portal-brand">
           <span class="brand-mark">CAFE</span>
           <span class="brand-name">FurrfectCafe</span>
         </div>
 
-        <div class="auth-panel-copy">
-          <span class="eyebrow" style="color:#f4bf88;">Welcome Back</span>
-          <h1>Great to see you again!</h1>
-          <p>
-            Log in to track your orders, redeem promos, and order your favorites from FurrfectCafe.
-          </p>
-        </div>
+        <h1>Welcome to FurrfectCafe</h1>
+        <p>
+          Use this single login portal to access both the customer side and the admin side during your demo.
+        </p>
       </div>
 
       <p style="position:relative; z-index:1; font-family:Arial, Helvetica, sans-serif; color:rgba(255,255,255,0.72); margin:0;">
@@ -265,53 +296,83 @@
       </p>
     </section>
 
-    <section class="auth-form-wrap">
-      <div class="auth-card">
-        <h1 class="auth-title">Log In</h1>
-        <p class="auth-subtext">
-          Don’t have an account? <a href="register.html">Sign up free</a>
+    <section class="portal-form-wrap">
+      <div class="portal-card">
+        <h1 class="portal-title">Login Portal</h1>
+        <p class="portal-subtext">
+          New customer? <a href="register.html">Create an account here</a>
         </p>
 
-        <form id="loginForm" class="form-grid" novalidate>
-          <div class="field">
-            <label for="email">Email address</label>
-            <div class="field-icon-wrap">
-              <span class="field-icon">✉</span>
-              <input class="input" type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="password">Password</label>
-            <div class="field-icon-wrap">
-              <span class="field-icon">🔒</span>
-              <input class="input" type="password" id="password" name="password" placeholder="Enter your password" required minlength="6">
-              <button class="toggle-password" type="button" id="togglePassword" aria-label="Show password">👁</button>
-            </div>
-          </div>
-
-          <div class="form-row-between">
-            <label class="remember-wrap">
-              <input type="checkbox" id="rememberMe">
-              <span>Remember me</span>
-            </label>
-            <button type="button" class="text-link" id="forgotPasswordBtn">Forgot password?</button>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-full">🔐 Log In</button>
-
-          <div class="divider">or continue with</div>
-
-          <button type="button" class="btn google-btn btn-full" id="googleLoginBtn">Continue with Google</button>
-        </form>
-
-        <p class="auth-footer-link">
-          New to FurrfectCafe? <a href="register.html">Create an account →</a>
-        </p>
-
-        <div class="demo-note">
-          Demo login: any valid email + password with at least 6 characters will work.
+        <div class="portal-tabs">
+          <button type="button" class="portal-tab active" data-target="customerPanel">Customer Login</button>
+          <button type="button" class="portal-tab" data-target="adminPanel">Admin Login</button>
         </div>
+
+        <section class="login-panel active" id="customerPanel">
+          <form id="customerLoginForm" class="form-grid" novalidate>
+            <div class="field">
+              <label for="customerEmail">Email address</label>
+              <div class="field-icon-wrap">
+                <span class="field-icon">✉</span>
+                <input class="input" type="email" id="customerEmail" placeholder="customer@furrfectcafe.ph" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="customerPassword">Password</label>
+              <div class="field-icon-wrap">
+                <span class="field-icon">🔒</span>
+                <input class="input" type="password" id="customerPassword" placeholder="Enter password" required minlength="6">
+                <button class="toggle-password" type="button" data-toggle="customerPassword">👁</button>
+              </div>
+            </div>
+
+            <div class="form-row-between">
+              <label class="remember-wrap">
+                <input type="checkbox" id="rememberMe">
+                <span>Remember me</span>
+              </label>
+              <button type="button" class="text-link" id="forgotPasswordBtn">Forgot password?</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">🔐 Log In as Customer</button>
+
+            <div class="divider">or continue with</div>
+
+            <button type="button" class="btn google-btn btn-full" id="googleLoginBtn">Continue with Google</button>
+          </form>
+
+          <div class="demo-note">
+            Customer demo login: any valid email + password with at least 6 characters opens the homepage.
+          </div>
+        </section>
+
+        <section class="login-panel" id="adminPanel">
+          <form id="adminLoginForm" class="form-grid" novalidate>
+            <div class="field">
+              <label for="adminEmail">Admin email</label>
+              <div class="field-icon-wrap">
+                <span class="field-icon">🛠</span>
+                <input class="input" type="email" id="adminEmail" placeholder="admin@furrfectcafe.ph" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="adminPassword">Password</label>
+              <div class="field-icon-wrap">
+                <span class="field-icon">🔒</span>
+                <input class="input" type="password" id="adminPassword" placeholder="Enter admin password" required minlength="6">
+                <button class="toggle-password" type="button" data-toggle="adminPassword">👁</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">🔐 Log In as Admin</button>
+          </form>
+
+          <div class="admin-note">
+            Admin demo login: any valid email + password with at least 6 characters opens the admin dashboard.
+          </div>
+        </section>
       </div>
     </section>
   </main>
@@ -319,35 +380,48 @@
   <script src="script.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const loginForm = document.getElementById("loginForm");
-      const passwordInput = document.getElementById("password");
-      const togglePassword = document.getElementById("togglePassword");
-      const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
-      const googleLoginBtn = document.getElementById("googleLoginBtn");
+      const tabs = document.querySelectorAll(".portal-tab");
+      const panels = document.querySelectorAll(".login-panel");
 
-      togglePassword.addEventListener("click", () => {
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-        togglePassword.textContent = isPassword ? "🙈" : "👁";
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.target;
+
+          tabs.forEach(item => item.classList.remove("active"));
+          panels.forEach(panel => panel.classList.remove("active"));
+
+          tab.classList.add("active");
+          document.getElementById(target).classList.add("active");
+        });
       });
 
-      forgotPasswordBtn.addEventListener("click", () => {
-        alert("Forgot password is a front-end demo only for now.");
+      document.querySelectorAll(".toggle-password").forEach(button => {
+        button.addEventListener("click", () => {
+          const input = document.getElementById(button.dataset.toggle);
+          const isPassword = input.type === "password";
+
+          input.type = isPassword ? "text" : "password";
+          button.textContent = isPassword ? "🙈" : "👁";
+        });
       });
 
-      googleLoginBtn.addEventListener("click", () => {
-        alert("Google sign-in is a front-end demo only for now.");
+      document.getElementById("forgotPasswordBtn").addEventListener("click", () => {
+        alert("Forgot password is a front-end demo only.");
       });
 
-      loginForm.addEventListener("submit", (event) => {
+      document.getElementById("googleLoginBtn").addEventListener("click", () => {
+        alert("Google login is a front-end demo only.");
+      });
+
+      document.getElementById("customerLoginForm").addEventListener("submit", event => {
         event.preventDefault();
 
-        const email = document.getElementById("email").value.trim();
-        const password = passwordInput.value.trim();
+        const email = document.getElementById("customerEmail").value.trim();
+        const password = document.getElementById("customerPassword").value.trim();
         const rememberMe = document.getElementById("rememberMe").checked;
 
-        if (!email || !/\S+@\S+\.\S+/.test(email)) {
-          alert("Please enter a valid email address.");
+        if (!/\S+@\S+\.\S+/.test(email)) {
+          alert("Please enter a valid customer email.");
           return;
         }
 
@@ -357,17 +431,40 @@
         }
 
         const userName = email.split("@")[0];
-        const demoUser = {
-          name: userName,
-          email: email,
-          rememberMe: rememberMe
-        };
 
-        localStorage.setItem("furrfectcafe_user", JSON.stringify(demoUser));
         localStorage.setItem("furrfectcafe_logged_in", "true");
+        localStorage.setItem("furrfectcafe_user", JSON.stringify({
+          name: userName,
+          email,
+          rememberMe
+        }));
 
-        alert("Login successful. Redirecting to home page.");
         window.location.href = "index.html";
+      });
+
+      document.getElementById("adminLoginForm").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const email = document.getElementById("adminEmail").value.trim();
+        const password = document.getElementById("adminPassword").value.trim();
+
+        if (!/\S+@\S+\.\S+/.test(email)) {
+          alert("Please enter a valid admin email.");
+          return;
+        }
+
+        if (password.length < 6) {
+          alert("Password must be at least 6 characters.");
+          return;
+        }
+
+        localStorage.setItem("furrfectcafe_admin_logged_in", "true");
+        localStorage.setItem("furrfectcafe_admin_user", JSON.stringify({
+          name: "Admin",
+          email
+        }));
+
+        window.location.href = "admin-dashboard.html";
       });
     });
   </script>
